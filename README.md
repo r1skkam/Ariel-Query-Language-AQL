@@ -19,5 +19,15 @@ SELECT QIDNAME(qid) as 'Event Name', LOGSOURCENAME(##) as 'Log Source', DATEFORM
 ```
 SELECT QIDNAME(qid) as 'Event Name', LOGSOURCENAME(###) as 'Log Source', DATEFORMAT(starttime, 'dd MMM YYYY, HH:mm:ss') as 'Date/Time', sourceip as 'Source IP', destinationip as 'Destination IP', destinationport as 'Destination Port', username as 'Username' FROM events WHERE QIDNAME(qid) = 'User authenticated successfully' OR QIDNAME(qid) = 'Session Allowed' OR QIDNAME(qid) = 'Session Denied' AND logsourceid = '###' AND username ILIKE '%AliceBob%' LAST 1440 MINUTES
 ```
+*Last 10 VPN users login attempts 
+
+SELECT DATEFORMAT("startTime", 'MMM dd yyyy hh:mm a') AS 'Start Time', sourceip as 'Source IP', sourceGeographicLocation as 'GeoLoaction', username as 'Username' from events where LOGSOURCENAME(logsourceid) = 'PaSeries @ HTD-PANORAMA.mpt.com.mm' AND CATEGORYNAME(category) = 'User Login Success' Last 5 HOURS
+```
+
+*Qradar Access Users
+```
+select sourceip as "Source IP", username as "User Name" from events where LOGSOURCENAME(logsourceid) = 'SIM Audit-2 :: MPTMONQRD01' and username is not null and (INCIDR('10.77.39.40/27', "sourceIP") OR INCIDR('192.168.160.0/24', "sourceIP")) group by username last 30 MINUTES 
+```
+
 
 **Credited and special thanks to [Bro Aung Ko Ko](https://www.linkedin.com/in/aung-ko-ko-02194621a/)**
