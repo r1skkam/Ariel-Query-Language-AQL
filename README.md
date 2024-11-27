@@ -31,5 +31,15 @@ SELECT DATEFORMAT("startTime", 'MMM dd yyyy hh:mm a') AS 'Start Time', sourceip 
 select sourceip as "Source IP", username as "User Name" from events where LOGSOURCENAME(logsourceid) = 'SIM Audit-2 :: logsourcename' and username is not null and (INCIDR('*.*.*.*/27', "sourceIP") OR INCIDR('192.168.1.0/24', "sourceIP")) group by username last 30 MINUTES 
 ```
 
+*Heap Memory Usage
+
+```
+SELECT DATEFORMAT(starttime, 'yyyy-MM-dd') as "Date", "Hostname" as "QRadar Appliance Name", 
+"Component Type", LONG(SUM("Value")/(1024*1024*1024)) as "Memory Usage Per Day (GB)"
+FROM events 
+WHERE (qid = 94000001)  AND ("Metric ID" = 'HeapMemoryUsed') 
+GROUP BY "Date", "Hostname", "Component Type"
+ORDER BY "Date", "Hostname", "Component Type"
+```
 
 **Credited and special thanks to [Bro Aung Ko Ko](https://www.linkedin.com/in/aung-ko-ko-02194621a/)**
